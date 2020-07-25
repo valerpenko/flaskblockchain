@@ -10,7 +10,6 @@ class Blockchain(object):
     def new_transaction(self, sender, recipient, amount):
         """
         Создает новую транзакцию в следующем блоке
-
         :param sender: <str> Адрес отправителя
         :param recipient: <str> Адрес получателя
         :param amount: <int> Сумма
