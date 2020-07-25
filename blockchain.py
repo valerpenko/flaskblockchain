@@ -7,9 +7,23 @@ class Blockchain(object):
         # Создает новый блок и вносит его в цепь
         pass
 
-    def new_transaction(self):
-        # Вносит новую транзакцию в список транзакций
-        pass
+    def new_transaction(self, sender, recipient, amount):
+        """
+        Направляет новую транзакцию в следующий блок
+
+        :param sender: <str> Адрес отправителя
+        :param recipient: <str> Адрес получателя
+        :param amount: <int> Сумма
+        :return: <int> Индекс блока, который будет хранить эту транзакцию
+        """
+
+        self.current_transactions.append({
+            'sender': sender,
+            'recipient': recipient,
+            'amount': amount,
+        })
+
+        return self.last_block['index'] + 1
 
     @staticmethod
     def hash(block):
