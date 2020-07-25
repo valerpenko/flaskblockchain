@@ -9,7 +9,7 @@ class Blockchain(object):
 
     def new_transaction(self, sender, recipient, amount):
         """
-        Направляет новую транзакцию в следующий блок
+        Создает новую транзакцию в следующем блоке
 
         :param sender: <str> Адрес отправителя
         :param recipient: <str> Адрес получателя
