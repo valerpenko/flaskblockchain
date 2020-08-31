@@ -1,0 +1,43 @@
+body {
+    background-color: #eee;
+    font-family: "Helvetica Neue", serif;
+}
+
+h1 {
+    padding: 0 16px;
+}
+
+.split {
+    display: flex;
+}
+
+.split>div {
+    width: 50%;
+    padding: 0 16px;
+}
+
+.split>div:not(:last-child) {
+    border-right: 2px #ddd solid;
+}
+
+.json {
+    background-color: #ddd;
+    font-family: "Courier New", serif;
+    color: #222;
+    white-space: pre;
+    padding: 4px;
+    margin: 4px;
+}
+
+.button {
+    background-color: #ddd;
+    padding: 8px;
+    margin: 4px;
+    cursor: pointer;
+    color: #222222;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: #ccc;
+}
