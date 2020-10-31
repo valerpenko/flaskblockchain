@@ -2,11 +2,11 @@ import hashlib
 import json
 from time import time
 
-from textwrap import dedent
 from uuid import uuid4
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from urllib.parse import urlparse
+
 
 class Blockchain(object):
     def __init__(self):
@@ -157,7 +157,7 @@ class Blockchain(object):
 
         # Захватываем и проверяем все цепи из всех узлов сети
         for node in neighbours:
-            response = requests.get(f'http://{node}/chain')
+            response = request.get(f'http://{node}/chain')
 
             if response.status_code == 200:
                 length = response.json()['length']
@@ -174,14 +174,18 @@ class Blockchain(object):
             return True
 
         return False
+
+
 # Создаем экземпляр узла
 app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 # Генерируем уникальный на глобальном уровне адрес для этого узла
 node_identifier = str(uuid4()).replace('-', '')
 
 # Создаем экземпляр блокчейна
 blockchain = Blockchain()
+
 
 @app.route('/mine', methods=['GET'])
 def mine():
@@ -211,6 +215,7 @@ def mine():
     }
     return jsonify(response), 200
 
+
 @app.route('/transactions/new', methods=['POST'])
 def new_transaction():
     values = request.get_json()
@@ -221,10 +226,11 @@ def new_transaction():
         return 'Missing values', 400
 
     # Создание новой транзакции
-    index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
+    block_index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
 
-    response = {'message': f'Transaction will be added to Block {index}'}
+    response = {'message': f'Transaction will be added to Block {block_index}'}
     return jsonify(response), 201
+
 
 @app.route('/chain', methods=['GET'])
 def full_chain():
@@ -269,6 +275,16 @@ def consensus():
         }
 
     return jsonify(response), 200
+
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template(
+        'index.html',
+        chain=str.strip(json.dumps(blockchain.chain, indent=2)),
+        current_transactions=json.dumps(blockchain.current_transactions, indent=2),
+    )
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
